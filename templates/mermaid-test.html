@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mermaid Diagram Tests</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .diagram-container {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #666;
+            border-bottom: 2px solid #4A90E2;
+            padding-bottom: 10px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Network Template Mermaid Diagram Tests</h1>
+    <p>This page tests all Mermaid diagrams from the network templates repository.</p>
+
+    <div class="diagram-container">
+        <h2>1. Hub and Spoke Network Topology</h2>
+        <div class="mermaid">
+graph TD
+    Hub[Hub Network<br/>10.0.0.0/16<br/>Shared Services]
+
+    Spoke1[Spoke 1<br/>Production<br/>10.1.0.0/16]
+    Spoke2[Spoke 2<br/>Development<br/>10.2.0.0/16]
+    Spoke3[Spoke 3<br/>Testing<br/>10.3.0.0/16]
+    Spoke4[Spoke 4<br/>Partner Network<br/>10.4.0.0/16]
+
+    OnPrem[On-Premise<br/>Data Center<br/>192.168.0.0/16]
+    Internet[Internet]
+
+    Hub <--> Spoke1
+    Hub <--> Spoke2
+    Hub <--> Spoke3
+    Hub <--> Spoke4
+
+    Hub <--> OnPrem
+    Hub <--> Internet
+
+    style Hub fill:#4A90E2,stroke:#2E5C8A,stroke-width:3px,color:#fff
+    style Spoke1 fill:#7ED321,stroke:#5FA319,stroke-width:2px
+    style Spoke2 fill:#7ED321,stroke:#5FA319,stroke-width:2px
+    style Spoke3 fill:#7ED321,stroke:#5FA319,stroke-width:2px
+    style Spoke4 fill:#7ED321,stroke:#5FA319,stroke-width:2px
+    style OnPrem fill:#F5A623,stroke:#C77F1B,stroke-width:2px
+    style Internet fill:#D0021B,stroke:#A00116,stroke-width:2px
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>2. CI/CD Pipeline Flow</h2>
+        <div class="mermaid">
+graph LR
+    Dev[Developer<br/>Commits Code]
+    SCM[Source Control<br/>Git Repository]
+
+    Trigger{Pipeline<br/>Triggered}
+
+    Build[Build Stage<br/>Compile & Package]
+    BuildFail{Build<br/>Success?}
+
+    Test[Test Stage<br/>Unit & Integration Tests]
+    TestFail{Tests<br/>Pass?}
+
+    Security[Security Scan<br/>SAST/Dependency Check]
+    SecFail{Security<br/>Pass?}
+
+    Stage[Deploy to Staging<br/>QA Environment]
+    StageFail{Staging<br/>Tests Pass?}
+
+    Approval{Manual<br/>Approval?}
+
+    Prod[Deploy to Production<br/>Blue-Green/Canary]
+    ProdFail{Production<br/>Health OK?}
+
+    Notify[Notify Team<br/>Success]
+    NotifyFail[Notify Team<br/>Failure & Rollback]
+
+    Dev --> SCM
+    SCM --> Trigger
+    Trigger -->|Yes| Build
+    Trigger -->|No| Dev
+
+    Build --> BuildFail
+    BuildFail -->|Yes| Test
+    BuildFail -->|No| NotifyFail
+
+    Test --> TestFail
+    TestFail -->|Yes| Security
+    TestFail -->|No| NotifyFail
+
+    Security --> SecFail
+    SecFail -->|Yes| Stage
+    SecFail -->|No| NotifyFail
+
+    Stage --> StageFail
+    StageFail -->|Yes| Approval
+    StageFail -->|No| NotifyFail
+
+    Approval -->|Approved| Prod
+    Approval -->|Rejected| NotifyFail
+
+    Prod --> ProdFail
+    ProdFail -->|Yes| Notify
+    ProdFail -->|No| NotifyFail
+
+    NotifyFail --> Dev
+
+    style Dev fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    style SCM fill:#7ED321,stroke:#5FA319,stroke-width:2px
+    style Build fill:#F5A623,stroke:#C77F1B,stroke-width:2px
+    style Test fill:#F5A623,stroke:#C77F1B,stroke-width:2px
+    style Security fill:#F5A623,stroke:#C77F1B,stroke-width:2px
+    style Stage fill:#BD10E0,stroke:#9012FE,stroke-width:2px,color:#fff
+    style Prod fill:#50E3C2,stroke:#00D4B4,stroke-width:2px
+    style Notify fill:#7ED321,stroke:#5FA319,stroke-width:3px
+    style NotifyFail fill:#D0021B,stroke:#A00116,stroke-width:3px,color:#fff
+    style Trigger fill:#F8E71C,stroke:#D4C116,stroke-width:2px
+    style BuildFail fill:#F8E71C,stroke:#D4C116,stroke-width:2px
+    style TestFail fill:#F8E71C,stroke:#D4C116,stroke-width:2px
+    style SecFail fill:#F8E71C,stroke:#D4C116,stroke-width:2px
+    style StageFail fill:#F8E71C,stroke:#D4C116,stroke-width:2px
+    style Approval fill:#F8E71C,stroke:#D4C116,stroke-width:2px
+    style ProdFail fill:#F8E71C,stroke:#D4C116,stroke-width:2px
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>3. CI/CD Pipeline Sequence Diagram</h2>
+        <div class="mermaid">
+sequenceDiagram
+    participant Dev as Developer
+    participant Git as Git Repository
+    participant CI as CI Server
+    participant Build as Build Agent
+    participant Test as Test Runner
+    participant Scan as Security Scanner
+    participant Stage as Staging Env
+    participant Prod as Production
+
+    Dev->>Git: git push
+    Git->>CI: Webhook Trigger
+    CI->>Build: Start Build Job
+    Build->>Build: Compile & Package
+    Build-->>CI: Artifact Ready
+
+    CI->>Test: Run Tests
+    Test->>Test: Unit Tests
+    Test->>Test: Integration Tests
+    Test-->>CI: Tests Passed
+
+    CI->>Scan: Security Scan
+    Scan->>Scan: SAST Analysis
+    Scan->>Scan: Dependency Check
+    Scan-->>CI: No Vulnerabilities
+
+    CI->>Stage: Deploy to Staging
+    Stage->>Stage: Run Smoke Tests
+    Stage-->>CI: Staging Healthy
+
+    CI->>Dev: Request Approval
+    Dev-->>CI: Approved
+
+    CI->>Prod: Deploy to Production
+    Prod->>Prod: Health Checks
+    Prod-->>CI: Deployment Success
+
+    CI->>Dev: Notification: Success
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>4. AWS VPC with Subnets (Simplified)</h2>
+        <div class="mermaid">
+graph TD
+    Internet[Internet]
+    IGW[Internet Gateway]
+    VPC[AWS VPC<br/>10.0.0.0/16]
+
+    PubSub1[Public Subnet 1<br/>10.0.1.0/24]
+    PubSub2[Public Subnet 2<br/>10.0.2.0/24]
+
+    PrivSub1[Private Subnet 1<br/>10.0.11.0/24]
+    PrivSub2[Private Subnet 2<br/>10.0.12.0/24]
+
+    NAT1[NAT Gateway 1]
+    NAT2[NAT Gateway 2]
+
+    Internet <--> IGW
+    IGW <--> VPC
+    VPC --> PubSub1
+    VPC --> PubSub2
+    VPC --> PrivSub1
+    VPC --> PrivSub2
+
+    PubSub1 --> NAT1
+    PubSub2 --> NAT2
+    NAT1 --> PrivSub1
+    NAT2 --> PrivSub2
+
+    style VPC fill:#FF9900,stroke:#EC7211,stroke-width:3px,color:#fff
+    style PubSub1 fill:#7ED321,stroke:#5FA319,stroke-width:2px
+    style PubSub2 fill:#7ED321,stroke:#5FA319,stroke-width:2px
+    style PrivSub1 fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    style PrivSub2 fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    style IGW fill:#F5A623,stroke:#C77F1B,stroke-width:2px
+    style NAT1 fill:#BD10E0,stroke:#9012FE,stroke-width:2px,color:#fff
+    style NAT2 fill:#BD10E0,stroke:#9012FE,stroke-width:2px,color:#fff
+    style Internet fill:#D0021B,stroke:#A00116,stroke-width:2px,color:#fff
+        </div>
+    </div>
+
+    <div class="diagram-container">
+        <h2>5. DevOps DMZ Architecture (Simplified)</h2>
+        <div class="mermaid">
+graph TD
+    Internet[Internet]
+
+    subgraph DMZ[DMZ Zone - DevOps]
+        Jenkins[Jenkins<br/>Build Server]
+        Artifactory[Artifactory<br/>Artifact Storage]
+        GitLab[GitLab<br/>Source Control]
+    end
+
+    subgraph AppZone[Application Zone]
+        App1[App Server 1]
+        App2[App Server 2]
+    end
+
+    subgraph DataZone[Data Zone]
+        DB[(Database)]
+        Cache[Redis Cache]
+    end
+
+    Internet --> DMZ
+    Jenkins --> AppZone
+    Artifactory --> AppZone
+    AppZone --> DataZone
+
+    style DMZ fill:#FFF4E6,stroke:#F5A623,stroke-width:3px
+    style AppZone fill:#E6F4FF,stroke:#4A90E2,stroke-width:3px
+    style DataZone fill:#FFE6E6,stroke:#D0021B,stroke-width:3px
+    style Jenkins fill:#7ED321,stroke:#5FA319,stroke-width:2px
+    style Artifactory fill:#7ED321,stroke:#5FA319,stroke-width:2px
+    style GitLab fill:#7ED321,stroke:#5FA319,stroke-width:2px
+    style App1 fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    style App2 fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    style DB fill:#D0021B,stroke:#A00116,stroke-width:2px,color:#fff
+    style Cache fill:#50E3C2,stroke:#00D4B4,stroke-width:2px
+        </div>
+    </div>
+
+    <div class="status success" id="success-message" style="display:none;">
+        ✅ All diagrams rendered successfully!
+    </div>
+
+    <div class="status error" id="error-message" style="display:none;">
+        ❌ Some diagrams failed to render. Check browser console for details.
+    </div>
+
+    <script>
+        // Monitor for mermaid rendering completion
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const diagramElements = document.querySelectorAll('.mermaid');
+                const hasErrors = Array.from(diagramElements).some(el =>
+                    el.querySelector('.error') || el.textContent.includes('Syntax error')
+                );
+
+                if (hasErrors) {
+                    document.getElementById('error-message').style.display = 'block';
+                } else {
+                    document.getElementById('success-message').style.display = 'block';
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
